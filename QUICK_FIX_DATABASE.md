@@ -42,7 +42,9 @@ vercel link
 vercel env pull .env.production
 
 # 4. Run migrations
-export $(cat .env.production | xargs)
+set -a
+source .env.production
+set +a
 npx prisma migrate deploy
 ```
 

@@ -30,7 +30,9 @@ This downloads your production environment variables (including DATABASE_URL).
 
 ```bash
 # Load the production environment
-export $(cat .env.production | xargs)
+set -a
+source .env.production
+set +a
 
 # Run migrations
 npx prisma migrate deploy

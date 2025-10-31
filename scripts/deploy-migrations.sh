@@ -29,7 +29,9 @@ echo "✅ Environment variables pulled"
 echo ""
 
 echo "2️⃣  Loading environment variables..."
-export $(cat .env.production | grep -v '^#' | xargs)
+set -a
+source .env.production
+set +a
 
 if [ -z "$DATABASE_URL" ]; then
     echo "❌ DATABASE_URL not found in environment variables"
