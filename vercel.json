@@ -6,11 +6,7 @@
   "regions": ["iad1"],
   "crons": [
     {
-      "path": "/api/cron/publish-scheduled",
-      "schedule": "* * * * *"
-    },
-    {
-      "path": "/api/cron/cleanup-tokens",
+      "path": "/api/cron/daily-maintenance",
       "schedule": "0 0 * * *"
     }
   ]

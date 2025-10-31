@@ -203,7 +203,7 @@ await Promise.all(
 - Save with status SCHEDULED
 
 **Task 28: Create scheduled publishing cron job**
-- Already exists: `app/api/cron/publish-scheduled/route.ts`
+- Updated to: `app/api/cron/daily-maintenance/route.ts` (combined with token cleanup)
 - Configured in `vercel.json`
 - Just needs testing
 

@@ -13,7 +13,7 @@
 ### ✅ Deployment Configuration
 
 1. **vercel.json** - Vercel configuration with cron jobs
-2. **Cron API Routes** - `/api/cron/cleanup-tokens` and `/api/cron/publish-scheduled`
+2. **Cron API Route** - `/api/cron/daily-maintenance` (combines scheduled publishing and token cleanup)
 3. **.gitignore** - Updated to exclude production env files
 4. **.env.example** - Updated with all required variables
 
