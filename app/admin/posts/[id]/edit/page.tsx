@@ -4,14 +4,15 @@ import { PostService } from '@/lib/services/post.service';
 import { PostEditor } from '@/components/admin/PostEditor';
 import { notFound } from 'next/navigation';
 
-export default async function EditPostPage({ params }: { params: { id: string } }) {
+export default async function EditPostPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
   
   if (!session || session.user.role !== 'ADMIN') {
     redirect('/signin');
   }
 
-  const post = await PostService.getPostById(params.id);
+  const { id } = await params;
+  const post = await PostService.getPostById(id);
 
   if (!post) {
     notFound();

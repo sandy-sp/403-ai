@@ -2,7 +2,7 @@
 
 > A modern, full-featured blogging platform dedicated to sharing AI research, conducting discussions, publishing AI news, and exploring forbidden knowledge in the AI/ML space.
 
-![Next.js](https://img.shields.io/badge/Next.js-14+-black?style=flat-square&logo=next.js)
+![Next.js](https://img.shields.io/badge/Next.js-16+-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue?style=flat-square&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3+-38B2AC?style=flat-square&logo=tailwind-css)
 ![Prisma](https://img.shields.io/badge/Prisma-5+-2D3748?style=flat-square&logo=prisma)
@@ -87,7 +87,7 @@
 
 | Category | Technology |
 |----------|-----------|
-| **Framework** | Next.js 14+ (App Router) |
+| **Framework** | Next.js 16+ (App Router with Turbopack) |
 | **Language** | TypeScript |
 | **Styling** | Tailwind CSS |
 | **Database** | PostgreSQL |
@@ -151,9 +151,24 @@ Password: admin123
 
 ## 📚 Documentation
 
-- **[SETUP.md](SETUP.md)** - Detailed setup instructions
-- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Deployment checklist and guide
-- **[.kiro/specs/](./kiro/specs/)** - Complete project specifications
+All documentation is organized in the [`docs/`](docs/) directory:
+
+### 🚀 Deployment
+- **[Quick Deploy](docs/deployment/QUICK_DEPLOY.md)** - Deploy in 5 minutes
+- **[Deployment Guide](docs/deployment/DEPLOYMENT_GUIDE.md)** - Complete deployment instructions
+- **[Pre-Deployment Setup](docs/deployment/PRE_DEPLOYMENT_SETUP.md)** - Pre-deployment checklist
+
+### 📖 Guides
+- **[Setup Guide](docs/guides/SETUP.md)** - Development environment setup
+- **[Email Setup](docs/guides/EMAIL_SETUP_OPTIONS.md)** - Configure email service
+
+### 📊 Reports
+- **[Audit Report](docs/reports/AUDIT_REPORT.md)** - Comprehensive codebase audit
+- **[Upgrade Summary](docs/reports/UPGRADE_SUMMARY.md)** - Next.js 16 upgrade details
+- **[Implementation Status](docs/reports/IMPLEMENTATION_STATUS.md)** - Feature status
+
+### 📋 Full Documentation Index
+See **[docs/README.md](docs/README.md)** for complete documentation index
 
 ## 🏗️ Project Structure
 

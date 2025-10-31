@@ -5,18 +5,19 @@ import { errorResponse, successResponse } from '@/lib/utils/api';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await requireAdmin();
     const body = await request.json();
     const { action } = body;
 
     let post;
     if (action === 'publish') {
-      post = await PostService.publishPost(params.id);
+      post = await PostService.publishPost(id);
     } else if (action === 'unpublish') {
-      post = await PostService.unpublishPost(params.id);
+      post = await PostService.unpublishPost(id);
     } else {
       return errorResponse(new Error('Invalid action'));
     }

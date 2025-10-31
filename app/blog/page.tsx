@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { PostService } from '@/lib/services/post.service';
 import { CategoryService } from '@/lib/services/category.service';
 import { TagService } from '@/lib/services/tag.service';
@@ -57,21 +58,25 @@ export default async function BlogPage({
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Main Content */}
           <div className="flex-1">
-            <BlogList
-              posts={posts}
-              currentPage={page}
-              totalPages={totalPages}
-              total={total}
-            />
+            <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+              <BlogList
+                posts={posts}
+                currentPage={page}
+                totalPages={totalPages}
+                total={total}
+              />
+            </Suspense>
           </div>
 
           {/* Sidebar */}
           <aside className="lg:w-80">
-            <BlogSidebar
-              categories={categories}
-              tags={tags}
-              popularPosts={popularPosts}
-            />
+            <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+              <BlogSidebar
+                categories={categories}
+                tags={tags}
+                popularPosts={popularPosts}
+              />
+            </Suspense>
           </aside>
         </div>
       </div>

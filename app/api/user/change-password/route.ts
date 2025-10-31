@@ -36,11 +36,11 @@ export async function POST(request: NextRequest) {
   } catch (error: unknown) {
     console.error('Change password error:', error);
 
-    if (error.message === 'Unauthorized') {
+    if (error instanceof Error && error.message === 'Unauthorized') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    if (error.name === 'ZodError') {
+    if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: 'Invalid password format', details: error.errors },
         { status: 400 }

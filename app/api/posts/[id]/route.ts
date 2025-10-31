@@ -9,10 +9,11 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const post = await PostService.getPostById(params.id);
+    const { id } = await params;
+    const post = await PostService.getPostById(id);
     
     if (!post) {
       throw new NotFoundError('Post');
@@ -26,22 +27,23 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireAdmin();
     const body = await request.json();
+    const { id } = await params;
     
     const validatedData = updatePostSchema.parse(body);
     
     // Get the original post to check if it's being published for the first time
-    const originalPost = await PostService.getPostById(params.id);
+    const originalPost = await PostService.getPostById(id);
     if (!originalPost) {
       throw new NotFoundError('Post');
     }
 
     const post = await PostService.updatePost({
-      id: params.id,
+      id,
       ...validatedData,
       featuredImageUrl: validatedData.featuredImageUrl === null ? undefined : validatedData.featuredImageUrl,
       focusKeyword: validatedData.focusKeyword === null ? undefined : validatedData.focusKeyword,
@@ -87,11 +89,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireAdmin();
-    await PostService.deletePost(params.id);
+    const { id } = await params;
+    await PostService.deletePost(id);
     return successResponse({ message: 'Post deleted successfully' });
   } catch (error) {
     return errorResponse(error);

@@ -12,15 +12,16 @@ const updateCategorySchema = z.object({
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await requireAdmin();
     const body = await request.json();
     const validatedData = updateCategorySchema.parse(body);
 
     const category = await CategoryService.updateCategory({
-      id: params.id,
+      id: id,
       ...validatedData,
     });
 
@@ -32,11 +33,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await requireAdmin();
-    await CategoryService.deleteCategory(params.id);
+    await CategoryService.deleteCategory(id);
     return successResponse({ message: 'Category deleted successfully' });
   } catch (error) {
     return errorResponse(error);

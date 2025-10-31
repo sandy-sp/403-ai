@@ -8,9 +8,10 @@ export const runtime = 'nodejs';
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     // Skip during build time
     if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
       return NextResponse.json(
@@ -22,7 +23,7 @@ export async function DELETE(
     // Require admin authentication
     await requireAdmin();
 
-    await NewsletterService.deleteSubscriber(params.id);
+    await NewsletterService.deleteSubscriber(id);
 
     return NextResponse.json(
       { message: 'Subscriber deleted successfully' },

@@ -14,7 +14,7 @@ const updateCommentSchema = z.object({
 // Update comment (user can edit their own)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Skip during build time
@@ -28,8 +28,9 @@ export async function PUT(
     const session = await requireAuth();
     const body = await request.json();
     const { content } = updateCommentSchema.parse(body);
+    const { id } = await params;
 
-    await CommentService.updateComment(params.id, session.user.id, content);
+    await CommentService.updateComment(id, session.user.id, content);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
@@ -63,7 +64,7 @@ export async function PUT(
 // Delete comment (user can delete their own, admin can delete any)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Skip during build time
@@ -75,13 +76,14 @@ export async function DELETE(
     }
 
     const session = await requireAuth();
+    const { id } = await params;
 
     // If admin, can delete any comment
     if (session.user.role === 'ADMIN') {
-      await CommentService.deleteComment(params.id);
+      await CommentService.deleteComment(id);
     } else {
       // Regular user can only delete their own
-      await CommentService.deleteComment(params.id, session.user.id);
+      await CommentService.deleteComment(id, session.user.id);
     }
 
     return NextResponse.json({ success: true });

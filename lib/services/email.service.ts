@@ -5,8 +5,8 @@ import { NewsletterConfirmationEmail } from '@/lib/email/templates/newsletter-co
 import { CommentNotificationEmail } from '@/lib/email/templates/comment-notification';
 import { WelcomeEmail } from '@/lib/email/templates/welcome';
 
-// Initialize Resend client
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend client - use placeholder during build if API key is missing
+const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder_for_build');
 
 const FROM_EMAIL = process.env.EMAIL_FROM || 'noreply@403-ai.com';
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';

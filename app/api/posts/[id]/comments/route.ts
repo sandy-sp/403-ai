@@ -12,9 +12,10 @@ const createCommentSchema = z.object({
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     // Apply rate limiting
     const rateLimitCheck = withRateLimit(commentRateLimit)(request);
     if ('error' in rateLimitCheck) {
@@ -32,7 +33,7 @@ export async function POST(
     const { content } = createCommentSchema.parse(body);
 
     const comment = await CommentService.createComment(
-      params.id,
+      id,
       session.user.id,
       content
     );
@@ -42,7 +43,7 @@ export async function POST(
       // Get post details and admin email
       const [post, adminUser] = await Promise.all([
         prisma.post.findUnique({
-          where: { id: params.id },
+          where: { id: id },
           select: { title: true, slug: true },
         }),
         prisma.user.findFirst({
@@ -92,10 +93,11 @@ export async function POST(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const comments = await CommentService.getPostComments(params.id, false);
+    const { id } = await params;
+    const comments = await CommentService.getPostComments(id, false);
     return NextResponse.json(comments);
   } catch (error: any) {
     console.error('Get comments error:', error);

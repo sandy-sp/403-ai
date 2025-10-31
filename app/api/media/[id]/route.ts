@@ -5,11 +5,12 @@ import { errorResponse, successResponse } from '@/lib/utils/api';
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await requireAdmin();
-    await MediaService.deleteImage(params.id);
+    await MediaService.deleteImage(id);
     return successResponse({ message: 'Media deleted successfully' });
   } catch (error) {
     return errorResponse(error);
@@ -18,14 +19,15 @@ export async function DELETE(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await requireAdmin();
     const body = await request.json();
     const { altText } = body;
 
-    const media = await MediaService.updateMediaAltText(params.id, altText);
+    const media = await MediaService.updateMediaAltText(id, altText);
     return successResponse(media);
   } catch (error) {
     return errorResponse(error);

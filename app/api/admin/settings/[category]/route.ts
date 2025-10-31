@@ -8,7 +8,7 @@ export const runtime = 'nodejs';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { category: string } }
+  { params }: { params: Promise<{ category: string }> }
 ) {
   try {
     // Skip during build time
@@ -20,12 +20,14 @@ export async function GET(
     }
 
     await requireAdmin();
+    const { category } = await params;
 
-    const settings = await SettingsService.getSettingsByCategory(params.category);
+    const settings = await SettingsService.getSettingsByCategory(category);
 
     return NextResponse.json(settings);
   } catch (error: any) {
-    console.error(`Get ${params.category} settings error:`, error);
+    const { category } = await params;
+    console.error(`Get ${category} settings error:`, error);
 
     if (error.message === 'Unauthorized' || error.message?.includes('Forbidden')) {
       return NextResponse.json(
@@ -35,7 +37,7 @@ export async function GET(
     }
 
     return NextResponse.json(
-      { error: `Failed to fetch ${params.category} settings` },
+      { error: `Failed to fetch ${category} settings` },
       { status: 500 }
     );
   }

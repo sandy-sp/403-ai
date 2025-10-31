@@ -8,7 +8,7 @@ export const runtime = 'nodejs';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Skip during build time
@@ -20,7 +20,8 @@ export async function POST(
     }
 
     await requireAdmin();
-    await CommentService.approveComment(params.id);
+    const { id } = await params;
+    await CommentService.approveComment(id);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
