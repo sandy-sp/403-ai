@@ -3,6 +3,10 @@ import { CommentService } from '@/lib/services/comment.service';
 import { requireAuth, requireAdmin } from '@/lib/auth';
 import { z } from 'zod';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 const updateCommentSchema = z.object({
   content: z.string().min(1, 'Comment cannot be empty').max(1000),
 });
@@ -13,6 +17,14 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Skip during build time
+    if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
+      return NextResponse.json(
+        { error: 'Service temporarily unavailable' },
+        { status: 503 }
+      );
+    }
+
     const session = await requireAuth();
     const body = await request.json();
     const { content } = updateCommentSchema.parse(body);
@@ -54,6 +66,14 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Skip during build time
+    if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
+      return NextResponse.json(
+        { error: 'Service temporarily unavailable' },
+        { status: 503 }
+      );
+    }
+
     const session = await requireAuth();
 
     // If admin, can delete any comment
