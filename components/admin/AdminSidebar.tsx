@@ -10,6 +10,7 @@ import {
   Image as ImageIcon,
   Mail,
   MessageSquare,
+  BarChart3,
   Settings,
 } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
@@ -49,6 +50,11 @@ const menuItems = [
     name: 'Subscribers',
     href: '/admin/subscribers',
     icon: Mail,
+  },
+  {
+    name: 'Analytics',
+    href: '/admin/analytics',
+    icon: BarChart3,
   },
   {
     name: 'Settings',

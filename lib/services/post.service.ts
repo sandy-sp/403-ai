@@ -261,6 +261,15 @@ export class PostService {
         { title: { contains: search, mode: 'insensitive' } },
         { content: { contains: search, mode: 'insensitive' } },
         { excerpt: { contains: search, mode: 'insensitive' } },
+        {
+          tags: {
+            some: {
+              tag: {
+                name: { contains: search, mode: 'insensitive' },
+              },
+            },
+          },
+        },
       ];
     }
 
