@@ -19,7 +19,8 @@
     "deploy:setup": "node scripts/setup-deployment.js",
     "deploy:check-db": "bash scripts/check-database.sh",
     "deploy:pre-check": "bash scripts/pre-deploy.sh",
-    "deploy:vercel-env": "bash scripts/setup-vercel-env.sh"
+    "deploy:vercel-env": "bash scripts/setup-vercel-env.sh",
+    "deploy:migrations": "bash scripts/deploy-migrations.sh"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
