@@ -9,13 +9,15 @@ export async function GET(request: NextRequest) {
 
     const searchParams = request.nextUrl.searchParams;
     const status = searchParams.get('status') as CommentStatus | null;
-    const search = searchParams.get('search') || undefined;
+    const postId = searchParams.get('postId');
+    const search = searchParams.get('search');
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '50');
 
     const result = await CommentService.getAllComments({
       status: status || undefined,
-      search,
+      postId: postId || undefined,
+      search: search || undefined,
       page,
       limit,
     });
@@ -24,8 +26,11 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     console.error('Get comments error:', error);
 
-    if (error.message === 'Unauthorized' || error.message === 'Forbidden: Admin access required') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (error.message === 'Unauthorized' || error.message?.includes('Forbidden')) {
+      return NextResponse.json(
+        { error: 'Admin access required' },
+        { status: 403 }
+      );
     }
 
     return NextResponse.json(

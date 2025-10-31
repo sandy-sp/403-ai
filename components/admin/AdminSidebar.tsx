@@ -9,6 +9,7 @@ import {
   Tags,
   Image as ImageIcon,
   Mail,
+  MessageSquare,
   Settings,
 } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
@@ -38,6 +39,11 @@ const menuItems = [
     name: 'Media',
     href: '/admin/media',
     icon: ImageIcon,
+  },
+  {
+    name: 'Comments',
+    href: '/admin/comments',
+    icon: MessageSquare,
   },
   {
     name: 'Subscribers',

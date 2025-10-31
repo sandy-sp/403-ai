@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { CommentService } from '@/lib/services/comment.service';
 import { requireAdmin } from '@/lib/auth';
 
-export async function PUT(
+export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
@@ -10,12 +10,15 @@ export async function PUT(
     await requireAdmin();
     await CommentService.approveComment(params.id);
 
-    return NextResponse.json({ message: 'Comment approved successfully' });
+    return NextResponse.json({ success: true });
   } catch (error: any) {
     console.error('Approve comment error:', error);
 
-    if (error.message === 'Unauthorized' || error.message === 'Forbidden: Admin access required') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (error.message === 'Unauthorized' || error.message?.includes('Forbidden')) {
+      return NextResponse.json(
+        { error: 'Admin access required' },
+        { status: 403 }
+      );
     }
 
     return NextResponse.json(

@@ -1,10 +1,13 @@
 import { PostService } from '@/lib/services/post.service';
+import { CommentService } from '@/lib/services/comment.service';
 import { notFound } from 'next/navigation';
 import { formatDateShort } from '@/lib/utils/date';
 import { calculateReadTime } from '@/lib/utils/content';
 import { sanitizeHtml } from '@/lib/utils/sanitize';
 import { SocialShare } from '@/components/blog/SocialShare';
 import { RelatedPosts } from '@/components/blog/RelatedPosts';
+import { CommentSection } from '@/components/comments/CommentSection';
+import { getSession } from '@/lib/auth';
 import Link from 'next/link';
 import { ArrowLeft, User, Calendar, Clock, Eye } from 'lucide-react';
 import type { Metadata } from 'next';
@@ -53,8 +56,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   // Increment view count
   await PostService.incrementViewCount(post.id);
 
-  // Get related posts
-  const relatedPosts = await PostService.getRelatedPosts(post.id, 3);
+  // Get related posts, comments, and session in parallel
+  const [relatedPosts, comments, session] = await Promise.all([
+    PostService.getRelatedPosts(post.id, 3),
+    CommentService.getPostComments(post.id, false),
+    getSession(),
+  ]);
 
   const readTime = calculateReadTime(post.content);
   const sanitizedContent = sanitizeHtml(post.content);
@@ -177,6 +184,14 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             <RelatedPosts posts={relatedPosts} />
           </div>
         )}
+
+        {/* Comments Section */}
+        <CommentSection
+          postId={post.id}
+          comments={comments}
+          currentUserId={session?.user?.id}
+          isAuthenticated={!!session}
+        />
       </article>
     </div>
   );
