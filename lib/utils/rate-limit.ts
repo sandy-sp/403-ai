@@ -123,8 +123,8 @@ export function withRateLimit(rateLimiter: RateLimiter) {
           'X-RateLimit-Limit': rateLimiter['config'].maxRequests.toString(),
           'X-RateLimit-Remaining': '0',
           'X-RateLimit-Reset': new Date(result.resetTime).toISOString(),
-          'Retry-After': result.retryAfter?.toString() || '60',
-        },
+          'Retry-After': (result.retryAfter || 60).toString(),
+        } as Record<string, string>,
       };
     }
 
@@ -134,7 +134,7 @@ export function withRateLimit(rateLimiter: RateLimiter) {
         'X-RateLimit-Limit': rateLimiter['config'].maxRequests.toString(),
         'X-RateLimit-Remaining': result.remaining.toString(),
         'X-RateLimit-Reset': new Date(result.resetTime).toISOString(),
-      },
+      } as Record<string, string>,
     };
   };
 }

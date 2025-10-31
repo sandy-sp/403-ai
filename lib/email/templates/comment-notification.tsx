@@ -38,14 +38,14 @@ export const CommentNotificationEmail = ({
             A new comment has been posted on your blog post:
           </Text>
           <Section style={postSection}>
-            <Text style={postTitle}>"{postTitle}"</Text>
+            <Text style={postTitleStyle}>"{postTitle}"</Text>
             <Link href={postUrl} style={link}>
               View Post
             </Link>
           </Section>
           <Section style={commentSection}>
-            <Text style={commentAuthor}>From: {commentAuthor}</Text>
-            <Text style={commentContent}>{commentContent}</Text>
+            <Text style={commentAuthorStyle}>From: {commentAuthor}</Text>
+            <Text style={commentContentStyle}>{commentContent}</Text>
           </Section>
           <Section style={buttonContainer}>
             <Button style={button} href={moderationUrl}>
@@ -105,7 +105,7 @@ const postSection = {
   margin: '20px 0',
 };
 
-const postTitle = {
+const postTitleStyle = {
   color: '#FFFFFF',
   fontSize: '18px',
   fontWeight: 'bold',
@@ -120,14 +120,14 @@ const commentSection = {
   borderLeft: '4px solid #B14AED',
 };
 
-const commentAuthor = {
+const commentAuthorStyle = {
   color: '#B14AED',
   fontSize: '14px',
   fontWeight: 'bold',
   margin: '0 0 10px',
 };
 
-const commentContent = {
+const commentContentStyle = {
   color: '#B0B3C1',
   fontSize: '16px',
   lineHeight: '24px',

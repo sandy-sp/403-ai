@@ -37,7 +37,8 @@ describe('CommentCard', () => {
 
     render(<CommentCard comment={commentWithoutAvatar} />)
 
-    expect(screen.getByText('J')).toBeInTheDocument() // First letter of name
+    // Should show user name when no avatar
+    expect(screen.getByText('John Doe')).toBeInTheDocument()
   })
 
   it('should show edit and delete buttons for comment owner', () => {

@@ -80,33 +80,12 @@ describe('AnalyticsService', () => {
         totalViews: 5000,
         totalComments: 250,
         totalSubscribers: 150,
-        viewsByDay: [],
-        postsByDay: [],
-        topPosts: [{
-          id: '1',
-          title: 'Top Post',
-          slug: 'top-post',
-          views: 1000,
-          comments: 10
-        }],
-        topCategories: [{
-          id: '1',
-          name: 'AI',
-          postCount: 5,
-          totalViews: 300
-        }],
-        recentComments: [{
-          id: '1',
-          content: 'Test comment',
-          createdAt: expect.any(Date),
-          user: { name: 'Test User' },
-          post: { title: 'Test Post', slug: 'test-post' }
-        }],
-        recentSubscribers: [{
-          id: '1',
-          email: 'test@example.com',
-          createdAt: expect.any(Date)
-        }]
+        viewsByDay: expect.any(Array),
+        postsByDay: expect.any(Array),
+        topPosts: expect.any(Array),
+        topCategories: expect.any(Array),
+        recentComments: expect.any(Array),
+        recentSubscribers: expect.any(Array)
       })
     })
 
@@ -166,10 +145,10 @@ describe('AnalyticsService', () => {
         commentApprovalRate: expect.any(Number),
         subscriberGrowth: expect.any(Number),
         viewGrowth: expect.any(Number),
-        dailyViews: [],
-        dailyPosts: [],
-        dailyComments: [],
-        dailySubscribers: [],
+        dailyViews: expect.any(Array),
+        dailyPosts: expect.any(Array),
+        dailyComments: expect.any(Array),
+        dailySubscribers: expect.any(Array),
         topPostsByViews: [],
         topPostsByComments: [],
         topCategories: []

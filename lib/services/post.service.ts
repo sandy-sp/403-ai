@@ -89,7 +89,7 @@ export class PostService {
         include: this.POST_INCLUDE,
       });
 
-      return post as PostWithRelations;
+      return post as unknown as PostWithRelations;
     } catch (error) {
       handlePrismaError(error);
     }
@@ -183,7 +183,7 @@ export class PostService {
         include: this.POST_INCLUDE,
       });
 
-      return post as PostWithRelations;
+      return post as unknown as PostWithRelations;
     } catch (error) {
       handlePrismaError(error);
     }
@@ -285,7 +285,7 @@ export class PostService {
     ]);
 
     return {
-      posts: posts as PostWithRelations[],
+      posts: posts as unknown as PostWithRelations[],
       total,
       page,
       limit,
@@ -324,7 +324,7 @@ export class PostService {
         include: this.POST_INCLUDE,
       });
 
-      return post as PostWithRelations;
+      return post as unknown as PostWithRelations;
     } catch (error) {
       handlePrismaError(error);
     }
@@ -340,7 +340,7 @@ export class PostService {
         include: this.POST_INCLUDE,
       });
 
-      return post as PostWithRelations;
+      return post as unknown as PostWithRelations;
     } catch (error) {
       handlePrismaError(error);
     }
@@ -393,6 +393,6 @@ export class PostService {
       },
     });
 
-    return relatedPosts as PostWithRelations[];
+    return relatedPosts as unknown as PostWithRelations[];
   }
 }

@@ -26,7 +26,7 @@ export class EmailService {
     try {
       const resetLink = `${APP_URL}/reset-password?token=${resetToken}`;
 
-      const html = render(
+      const html = await render(
         PasswordResetEmail({
           userName,
           resetLink,
@@ -59,7 +59,7 @@ export class EmailService {
     try {
       const confirmLink = `${APP_URL}/api/newsletter/confirm?token=${confirmToken}`;
 
-      const html = render(
+      const html = await render(
         NewsletterConfirmationEmail({
           confirmLink,
         })
@@ -98,7 +98,7 @@ export class EmailService {
       const postUrl = `${APP_URL}/blog/${commentData.postSlug}`;
       const moderationUrl = `${APP_URL}/admin/comments`;
 
-      const html = render(
+      const html = await render(
         CommentNotificationEmail({
           postTitle: commentData.postTitle,
           postUrl,
@@ -134,7 +134,7 @@ export class EmailService {
     try {
       const loginUrl = `${APP_URL}/signin`;
 
-      const html = render(
+      const html = await render(
         WelcomeEmail({
           userName,
           loginUrl,

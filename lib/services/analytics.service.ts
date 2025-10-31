@@ -547,7 +547,7 @@ export class AnalyticsService {
   private static async getTopPostsByViews(start: Date, end: Date) {
     return prisma.post.findMany({
       where: {
-        publishedAt: { gte: start, lte: end },
+        publishedAt: { gte: start, lte: end, not: null },
         status: 'PUBLISHED',
       },
       orderBy: { viewCount: 'desc' },
@@ -559,10 +559,13 @@ export class AnalyticsService {
         viewCount: true,
         publishedAt: true,
       },
-    }).then(posts => posts.map(post => ({
-      ...post,
-      views: post.viewCount,
-    })));
+    }).then(posts => posts
+      .filter(post => post.publishedAt !== null)
+      .map(post => ({
+        ...post,
+        views: post.viewCount,
+        publishedAt: post.publishedAt!,
+      })));
   }
 
   /**
@@ -571,7 +574,7 @@ export class AnalyticsService {
   private static async getTopPostsByComments(start: Date, end: Date) {
     return prisma.post.findMany({
       where: {
-        publishedAt: { gte: start, lte: end },
+        publishedAt: { gte: start, lte: end, not: null },
         status: 'PUBLISHED',
       },
       select: {
@@ -587,13 +590,15 @@ export class AnalyticsService {
         comments: { _count: 'desc' },
       },
       take: 10,
-    }).then(posts => posts.map(post => ({
-      id: post.id,
-      title: post.title,
-      slug: post.slug,
-      publishedAt: post.publishedAt!,
-      comments: post._count.comments,
-    })));
+    }).then(posts => posts
+      .filter(post => post.publishedAt !== null)
+      .map(post => ({
+        id: post.id,
+        title: post.title,
+        slug: post.slug,
+        publishedAt: post.publishedAt!,
+        comments: post._count.comments,
+      })));
   }
 
   /**

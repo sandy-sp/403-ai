@@ -7,7 +7,7 @@ interface Metric {
   value: number;
   previousValue?: number;
   format?: 'number' | 'percentage' | 'duration';
-  icon?: React.ComponentType<{ size?: number; className?: string }>;
+  icon?: React.ComponentType<any>;
   color?: string;
 }
 

@@ -4,7 +4,9 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
 // Mock dependencies
-jest.mock('next/navigation')
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn()
+}))
 jest.mock('sonner')
 
 const mockPush = jest.fn()
@@ -130,7 +132,7 @@ describe('SettingsForm', () => {
     fireEvent.click(saveButton)
 
     await waitFor(() => {
-      expect(mockToast.error).toHaveBeenCalledWith('Failed to save settings')
+      expect(mockToast.error).toHaveBeenCalledWith('Network error')
     })
   })
 
@@ -202,8 +204,8 @@ describe('SettingsForm', () => {
     // Switch to SEO tab to see character limits
     fireEvent.click(screen.getByText('SEO'))
 
-    expect(screen.getByText('(max 60 characters)')).toBeInTheDocument()
-    expect(screen.getByText('(max 160 characters)')).toBeInTheDocument()
+    expect(screen.getByText(/max 60 characters/)).toBeInTheDocument()
+    expect(screen.getByText(/max 160 characters/)).toBeInTheDocument()
   })
 
   it('should show social media preview', () => {

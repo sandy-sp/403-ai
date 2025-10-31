@@ -18,7 +18,7 @@ interface PublishPanelProps {
 
 export function PublishPanel({ register, watch, setValue, errors }: PublishPanelProps) {
   const [categories, setCategories] = useState<any[]>([]);
-  const [tags, setTags] = useState<unknown[]>([]);
+  const [tags, setTags] = useState<any[]>([]);
   const [tagSearch, setTagSearch] = useState('');
   const [featuredImagePreview, setFeaturedImagePreview] = useState<string>('');
 

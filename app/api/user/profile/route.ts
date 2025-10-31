@@ -37,7 +37,10 @@ export async function PUT(request: NextRequest) {
 
     const updatedProfile = await ProfileService.updateProfile(
       session.user.id,
-      data
+      {
+        ...data,
+        avatarUrl: data.avatarUrl === null ? undefined : data.avatarUrl,
+      }
     );
 
     return NextResponse.json(updatedProfile);

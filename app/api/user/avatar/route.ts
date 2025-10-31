@@ -14,7 +14,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Upload to Cloudinary
-    const result = await MediaService.uploadImage(file, session.user.id);
+    const result = await MediaService.uploadImage({
+      file,
+      uploadedBy: session.user.id,
+    });
 
     // Update user avatar
     const updatedUser = await ProfileService.uploadAvatar(

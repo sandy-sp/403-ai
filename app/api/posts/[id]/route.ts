@@ -43,6 +43,8 @@ export async function PUT(
     const post = await PostService.updatePost({
       id: params.id,
       ...validatedData,
+      featuredImageUrl: validatedData.featuredImageUrl === null ? undefined : validatedData.featuredImageUrl,
+      focusKeyword: validatedData.focusKeyword === null ? undefined : validatedData.focusKeyword,
       publishedAt: validatedData.publishedAt
         ? new Date(validatedData.publishedAt)
         : undefined,

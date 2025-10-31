@@ -18,10 +18,7 @@ import {
   Link as LinkIcon,
   Image as ImageIcon,
   Youtube,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  AlignJustify,
+
   Minus,
 } from 'lucide-react';
 import { useCallback } from 'react';
@@ -171,39 +168,7 @@ export function EditorToolbar({ editor, onImageUpload }: EditorToolbarProps) {
         <Quote size={18} />
       </ToolbarButton>
 
-      <Divider />
 
-      <ToolbarButton
-        onClick={() => editor.chain().focus().setTextAlign('left').run()}
-        active={editor.isActive({ textAlign: 'left' })}
-        title="Align Left"
-      >
-        <AlignLeft size={18} />
-      </ToolbarButton>
-
-      <ToolbarButton
-        onClick={() => editor.chain().focus().setTextAlign('center').run()}
-        active={editor.isActive({ textAlign: 'center' })}
-        title="Align Center"
-      >
-        <AlignCenter size={18} />
-      </ToolbarButton>
-
-      <ToolbarButton
-        onClick={() => editor.chain().focus().setTextAlign('right').run()}
-        active={editor.isActive({ textAlign: 'right' })}
-        title="Align Right"
-      >
-        <AlignRight size={18} />
-      </ToolbarButton>
-
-      <ToolbarButton
-        onClick={() => editor.chain().focus().setTextAlign('justify').run()}
-        active={editor.isActive({ textAlign: 'justify' })}
-        title="Justify"
-      >
-        <AlignJustify size={18} />
-      </ToolbarButton>
 
       <Divider />
 
