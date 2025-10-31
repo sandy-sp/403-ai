@@ -3,6 +3,10 @@ import { NewsletterService } from '@/lib/services/newsletter.service';
 import { requireAdmin } from '@/lib/auth';
 import { SubscriberStatus } from '@prisma/client';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function GET(request: NextRequest) {
   try {
     // Require admin authentication

@@ -4,6 +4,10 @@ import { AnalyticsService } from '@/lib/services/analytics.service';
 import { subDays, parseISO } from 'date-fns';
 import { z } from 'zod';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 const querySchema = z.object({
   start: z.string().optional(),
   end: z.string().optional(),
@@ -12,6 +16,14 @@ const querySchema = z.object({
 
 export async function GET(request: NextRequest) {
   try {
+    // Skip during build time
+    if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
+      return NextResponse.json(
+        { error: 'Service temporarily unavailable' },
+        { status: 503 }
+      );
+    }
+
     await requireAdmin();
 
     const searchParams = request.nextUrl.searchParams;

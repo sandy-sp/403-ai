@@ -3,6 +3,10 @@ import { CommentService } from '@/lib/services/comment.service';
 import { requireAdmin } from '@/lib/auth';
 import { CommentStatus } from '@prisma/client';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function GET(request: NextRequest) {
   try {
     await requireAdmin();

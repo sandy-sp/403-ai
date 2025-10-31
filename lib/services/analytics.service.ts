@@ -116,6 +116,11 @@ export class AnalyticsService {
    */
   static async getDashboardAnalytics(): Promise<DashboardAnalytics> {
     try {
+      // Skip during build time when database is not available
+      if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
+        throw new Error('Database not available during build');
+      }
+
       const thirtyDaysAgo = subDays(new Date(), 30);
       
       // Get basic counts
@@ -245,6 +250,11 @@ export class AnalyticsService {
    */
   static async getDetailedAnalytics(dateRange: DateRange): Promise<DetailedAnalytics> {
     try {
+      // Skip during build time when database is not available
+      if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
+        throw new Error('Database not available during build');
+      }
+
       const { start, end } = dateRange;
       const previousPeriodStart = subDays(start, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
       const previousPeriodEnd = start;

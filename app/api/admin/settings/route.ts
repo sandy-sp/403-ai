@@ -3,6 +3,10 @@ import { requireAdmin } from '@/lib/auth';
 import { SettingsService } from '@/lib/services/settings.service';
 import { z } from 'zod';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 // Schema for updating settings
 const updateSettingsSchema = z.record(z.string(), z.string());
 

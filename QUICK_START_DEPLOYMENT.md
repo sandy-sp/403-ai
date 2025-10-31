@@ -1,13 +1,13 @@
 # Quick Start: Deploy to Vercel in 30 Minutes
 
-This is the fastest path to get your site live at www.403-ai.com
+This is the fastest path to get your site live at <www.403-ai.com>
 
 ## Prerequisites (5 minutes)
 
-1. **GitHub Account** - https://github.com/signup
-2. **Vercel Account** - https://vercel.com/signup (sign up with GitHub)
-3. **Cloudinary Account** - https://cloudinary.com/users/register/free
-4. **Resend Account** - https://resend.com/signup
+1. **GitHub Account** - <https://github.com/signup>
+2. **Vercel Account** - <https://vercel.com/signup> (sign up with GitHub)
+3. **Cloudinary Account** - <https://cloudinary.com/users/register/free>
+4. **Resend Account** - <https://resend.com/signup>
 
 ## Step 1: Push to GitHub (2 minutes)
 
@@ -25,7 +25,7 @@ git push -u origin main
 
 ## Step 2: Deploy to Vercel (10 minutes)
 
-1. Go to https://vercel.com/new
+1. Go to <https://vercel.com/new>
 2. Import your `403-ai` repository
 3. Add environment variables (click "Environment Variables"):
 
@@ -81,12 +81,14 @@ npx prisma db seed
 
 ## Step 5: Connect Domain (10 minutes)
 
-### In Vercel:
+### In Vercel
+
 1. Go to Settings → Domains
 2. Add: `www.403-ai.com`
 3. Copy the CNAME record shown
 
-### In Squarespace:
+### In Squarespace
+
 1. Login → Settings → Domains → 403-ai.com
 2. Click "DNS Settings"
 3. Add CNAME record:
@@ -95,18 +97,20 @@ npx prisma db seed
    - Value: `cname.vercel-dns.com`
 4. Save
 
-### Wait & Verify:
+### Wait & Verify
+
 1. Wait 5-10 minutes
 2. In Vercel, click "Refresh" next to domain
 3. Once verified, set as "Primary Domain"
 
 ## Step 6: Test Your Site (5 minutes)
 
-Visit: https://www.403-ai.com
+Visit: <https://www.403-ai.com>
 
 Test these:
+
 - [ ] Homepage loads
-- [ ] Sign in: admin@403-ai.com / admin123
+- [ ] Sign in: <admin@403-ai.com> / admin123
 - [ ] Admin dashboard works
 - [ ] Blog page loads
 - [ ] About page loads
@@ -114,7 +118,7 @@ Test these:
 
 ## Done! 🎉
 
-Your site is now live at **www.403-ai.com**
+Your site is now live at **<www.403-ai.com>**
 
 ## Important Next Steps
 
@@ -125,14 +129,17 @@ Your site is now live at **www.403-ai.com**
 ## Troubleshooting
 
 **Domain not working?**
+
 - Wait 24-48 hours for DNS propagation
 - Check DNS: `dig www.403-ai.com`
 
 **Database error?**
+
 - Make sure you ran migrations
 - Check DATABASE_URL is set correctly
 
 **Build failing?**
+
 - Check build logs in Vercel
 - Make sure all env vars are set
 
@@ -146,7 +153,7 @@ git commit -m "Your changes"
 git push
 ```
 
-Check deployment status at: https://vercel.com/dashboard
+Check deployment status at: <https://vercel.com/dashboard>
 
 ---
 
