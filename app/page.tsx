@@ -3,6 +3,7 @@ import { PostService } from '@/lib/services/post.service';
 import { ArrowRight, BookOpen, MessageSquare, Newspaper } from 'lucide-react';
 import { formatDateShort } from '@/lib/utils/date';
 import { calculateReadTime } from '@/lib/utils/content';
+import { NewsletterForm } from '@/components/newsletter/NewsletterForm';
 
 export default async function Home() {
   const { posts } = await PostService.getPublishedPosts({ limit: 6, sortBy: 'publishedAt' });
@@ -113,6 +114,21 @@ export default async function Home() {
                 </p>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="py-16 bg-secondary/50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Stay Updated
+            </h2>
+            <p className="text-lg text-text-secondary mb-8">
+              Get the latest AI research, discussions, and news delivered to your inbox.
+            </p>
+            <NewsletterForm />
           </div>
         </div>
       </section>

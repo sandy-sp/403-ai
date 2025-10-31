@@ -8,6 +8,7 @@ import {
   FolderOpen,
   Tags,
   Image as ImageIcon,
+  Mail,
   Settings,
 } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
@@ -37,6 +38,11 @@ const menuItems = [
     name: 'Media',
     href: '/admin/media',
     icon: ImageIcon,
+  },
+  {
+    name: 'Subscribers',
+    href: '/admin/subscribers',
+    icon: Mail,
   },
   {
     name: 'Settings',
