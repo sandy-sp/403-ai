@@ -113,5 +113,4 @@ function renderBlogPage(
         </div>
       </div>
     );
-  }
 }
