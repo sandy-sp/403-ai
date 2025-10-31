@@ -1,0 +1,361 @@
+# Implementation Plan
+
+- [x] 1. Initialize Next.js project with TypeScript and configure base dependencies
+  - Create Next.js 14+ project with App Router and TypeScript
+  - Install and configure Tailwind CSS with custom dark theme configuration
+  - Set up ESLint and Prettier with project-specific rules
+  - Create environment variable template file (.env.example)
+  - Configure next.config.js with security headers and image domains
+  - _Requirements: Foundation for all subsequent tasks_
+
+- [x] 2. Set up database schema and Prisma ORM
+  - Install Prisma and initialize with PostgreSQL
+  - Create Prisma schema with User, Post, Category, Tag, PostCategory, PostTag, and Media models
+  - Generate Prisma Client
+  - Create database migration files
+  - Write seed script for initial admin user and sample data
+  - _Requirements: 1.1, 2.1, 4.1, 5.1_
+
+- [x] 3. Implement authentication system with NextAuth.js
+  - Install NextAuth.js v5 (Auth.js) and dependencies
+  - Create auth configuration file with credentials provider
+  - Implement password hashing utilities using bcrypt
+  - Create sign-in API route with email/password validation
+  - Create sign-up API route with user creation logic
+  - Implement middleware for protecting /admin/* routes
+  - Create auth utility functions (getSession, requireAuth, requireAdmin)
+  - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.6_
+
+- [x] 4. Create authentication UI pages
+  - Build sign-in page component with form validation
+  - Build sign-up page component with password strength indicator
+  - Create password reset request page
+  - Create password reset confirmation page
+  - Implement form handling with React Hook Form and Zod validation
+  - Add loading states and error messages
+  - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.6_
+
+- [x] 5. Build core utility functions and helpers
+  - Create slug generation utility from titles
+  - Create date formatting utilities
+  - Create read time calculator from content
+  - Create excerpt generator from content
+  - Create DOMPurify sanitization wrapper
+  - Create error handling utilities and custom error classes
+  - Create API response helper functions
+  - _Requirements: 1.2, 6.1, 7.1, 10.1_
+
+- [x] 6. Implement Post service layer
+  - Create PostService class with CRUD methods
+  - Implement createPost method with slug generation and validation
+  - Implement updatePost method with optimistic locking
+  - Implement deletePost method with cascade handling
+  - Implement getPostBySlug method with author and relations
+  - Implement getPublishedPosts method with pagination and filtering
+  - Implement incrementViewCount method
+  - Implement publishPost and unpublishPost methods
+  - Write unit tests for PostService methods
+  - _Requirements: 1.1, 1.2, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 7.2_
+
+- [x] 7. Implement Category and Tag service layers
+  - Create CategoryService with CRUD methods
+  - Implement createCategory with duplicate name validation
+  - Implement updateCategory and deleteCategory methods
+  - Implement getCategoriesWithPostCount method
+  - Create TagService with CRUD methods
+  - Implement createTag with slug auto-generation
+  - Implement getTagsWithPostCount method
+  - Write unit tests for Category and Tag services
+  - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8_
+
+- [x] 8. Set up image storage with Cloudinary
+  - Install Cloudinary SDK
+  - Create Cloudinary configuration with environment variables
+  - Create MediaService for upload operations
+  - Implement uploadImage method with file validation (type, size)
+  - Implement image optimization and thumbnail generation
+  - Implement deleteImage method
+  - Implement getMediaLibrary method with pagination
+  - Write unit tests for MediaService
+  - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9_
+
+- [x] 9. Create API routes for posts
+  - Create GET /api/posts route for listing posts with filters
+  - Create POST /api/posts route for creating new posts
+  - Create GET /api/posts/[id] route for fetching single post
+  - Create PUT /api/posts/[id] route for updating posts
+  - Create DELETE /api/posts/[id] route for deleting posts
+  - Create POST /api/posts/[id]/publish route for publishing/unpublishing
+  - Add authentication middleware to all routes
+  - Add request validation with Zod schemas
+  - Add error handling with custom error classes
+  - Write integration tests for all post API routes
+  - _Requirements: 1.1, 1.2, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8_
+
+- [x] 10. Create API routes for categories, tags, and media
+  - Create GET /api/categories route with post counts
+  - Create POST /api/categories route for creating categories
+  - Create PUT /api/categories/[id] and DELETE /api/categories/[id] routes
+  - Create GET /api/tags route with post counts
+  - Create POST /api/tags route for creating tags
+  - Create DELETE /api/tags/[id] route
+  - Create POST /api/media/upload route with file validation
+  - Create GET /api/media route for media library listing
+  - Create DELETE /api/media/[id] route
+  - Add authentication and validation to all routes
+  - Write integration tests for all routes
+  - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9_
+
+- [x] 11. Build Tiptap rich text editor component
+  - Install Tiptap core and extensions (StarterKit, Image, Link, CodeBlockLowlight, etc.)
+  - Create TiptapEditor component with toolbar
+  - Implement formatting buttons (bold, italic, underline, headings, lists, alignment)
+  - Implement link insertion with URL validation
+  - Implement image upload with drag-and-drop support
+  - Implement code block with syntax highlighting using Lowlight
+  - Implement video embed extension for YouTube
+  - Add character and word count display
+  - Add full-screen mode toggle
+  - Add placeholder text support
+  - Write component tests for TiptapEditor
+  - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9_
+
+- [x] 12. Create post editor page layout and components
+  - Create /admin/posts/new page with three-column layout
+  - Build EditorHeader component with Save Draft and Publish buttons
+  - Build EditorSidebar component with navigation links
+  - Build TitleInput component with auto-slug generation
+  - Build PublishPanel component for right sidebar
+  - Build FeaturedImageUpload component with preview
+  - Build ExcerptInput component with character counter
+  - Build CategorySelector component with checkbox list
+  - Build TagInput component with autocomplete
+  - Build SEOPanel component with meta fields
+  - Implement auto-save functionality every 30 seconds
+  - Wire up all components with form state management
+  - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9_
+
+- [x] 13. Implement post editor functionality and API integration
+  - Set up React Hook Form with Zod validation for post form
+  - Implement form submission handler for creating posts
+  - Implement Save as Draft functionality
+  - Implement Publish functionality with validation
+  - Implement image upload integration with MediaService
+  - Add loading states and error handling
+  - Add success toast notifications
+  - Implement navigation after successful save/publish
+  - Create /admin/posts/[id]/edit page reusing editor components
+  - Implement update functionality for existing posts
+  - Write E2E tests for creating and editing posts
+  - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9_
+
+- [x] 14. Build posts management page
+  - Create /admin/posts page with table layout
+  - Build PostsTable component with sortable columns
+  - Build TableToolbar with search input and status filter
+  - Implement real-time search functionality
+  - Implement status filter (All, Draft, Published, Archived)
+  - Build PostRow component with action buttons
+  - Implement bulk selection with checkboxes
+  - Implement bulk actions (Delete, Change Status)
+  - Build QuickEditModal for inline editing
+  - Implement pagination controls
+  - Add loading skeletons for better UX
+  - Write E2E tests for posts management
+  - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8_
+
+- [x] 15. Build categories management page
+  - Create /admin/categories page
+  - Build CategoryList component displaying all categories
+  - Build AddCategoryForm with name, slug, and description fields
+  - Implement category creation with duplicate validation
+  - Build EditCategoryModal for updating categories
+  - Implement category deletion with confirmation dialog
+  - Display post count for each category
+  - Add loading and error states
+  - Write E2E tests for category management
+  - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
+
+- [x] 16. Build tags management page
+  - Create /admin/tags page
+  - Build TagList component displaying all tags
+  - Build AddTagForm with name field (auto-generate slug)
+  - Implement tag creation functionality
+  - Implement tag deletion (no confirmation needed)
+  - Display post count for each tag
+  - Add loading and error states
+  - Write E2E tests for tag management
+  - _Requirements: 4.6, 4.7, 4.8_
+
+- [x] 17. Build media library page
+  - Create /admin/media page with grid layout
+  - Build MediaGrid component displaying image thumbnails
+  - Build DropZone component for drag-and-drop uploads
+  - Implement multi-file upload with progress indicators
+  - Build MediaCard component with image preview
+  - Build MediaDetailModal showing image details
+  - Implement copy URL to clipboard functionality
+  - Implement search and date filter
+  - Implement image deletion with confirmation
+  - Add file size and type validation on client side
+  - Write E2E tests for media library
+  - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9_
+
+- [x] 18. Build admin dashboard overview page
+  - Create /admin page with dashboard layout
+  - Build StatCard components for total posts, published, drafts, and views
+  - Implement data fetching for statistics
+  - Build RecentPostsList component showing 5 most recent posts
+  - Build SimpleAnalyticsChart showing views over 30 days
+  - Add quick action buttons (New Post, View Posts)
+  - Implement loading states with skeletons
+  - Optimize data fetching for performance (< 2 seconds)
+  - Write E2E tests for dashboard
+  - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.6_
+
+- [x] 19. Create admin layout with navigation
+  - Create /admin/layout.tsx with sidebar navigation
+  - Build AdminSidebar component with menu items
+  - Build AdminHeader component with user menu
+  - Implement active link highlighting
+  - Add mobile responsive navigation
+  - Add sign-out functionality
+  - Apply consistent styling across admin pages
+  - _Requirements: All admin requirements_
+
+- [x] 20. Build public home page
+  - Create / (root) page with hero section
+  - Build HeroSection component with headline and CTA buttons
+  - Build AboutSection component describing 403 AI mission
+  - Build LatestPostsGrid component showing 6 recent posts
+  - Build ServicesPreview component with cards
+  - Build NewsletterSignup component with email form
+  - Build Footer component with links and social media
+  - Implement responsive design for mobile
+  - Add animations and transitions
+  - _Requirements: Foundation for public site_
+
+- [x] 21. Build public blog list page
+  - Create /blog page with grid layout
+  - Build BlogHeader component
+  - Build BlogSidebar with CategoryList, PopularPosts, and TagCloud
+  - Build PostCard component displaying post preview
+  - Build PostGrid component with responsive layout
+  - Implement search functionality with real-time filtering
+  - Implement category filter
+  - Implement tag filter
+  - Implement sorting (newest, oldest, most viewed)
+  - Implement infinite scroll or pagination
+  - Add "No posts found" empty state
+  - Implement SSG with ISR (revalidate every 60 seconds)
+  - Write E2E tests for blog list page
+  - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9_
+
+- [x] 22. Build individual blog post page
+  - Create /blog/[slug] page with article layout
+  - Build ArticleHeader component with featured image, title, author, date, read time
+  - Build RichTextContent component with sanitized HTML rendering
+  - Implement view counter increment on page load
+  - Build TableOfContents component for long posts (>1000 words)
+  - Implement smooth scrolling to headings
+  - Build SocialShareButtons component (Twitter, LinkedIn, Facebook, Copy Link)
+  - Build RelatedPosts component showing 3-4 similar posts
+  - Build AuthorBio component with avatar and description
+  - Implement code block syntax highlighting
+  - Add copy button to code blocks
+  - Implement responsive mobile layout
+  - Implement SSG with ISR for all published posts
+  - Write E2E tests for blog post page
+  - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9, 7.10_
+
+- [x] 23. Implement SEO optimization
+  - Create generateMetadata function for blog post pages
+  - Add Open Graph meta tags for social sharing
+  - Add Twitter Card meta tags
+  - Implement JSON-LD structured data for articles
+  - Create sitemap.xml generation route
+  - Create robots.txt file
+  - Add canonical URLs to all pages
+  - Implement dynamic meta titles and descriptions
+  - Test meta tags with social media debuggers
+  - _Requirements: 10.1, 10.2, 10.7, 10.8, 10.9_
+
+- [x] 24. Implement performance optimizations
+  - Configure Next.js Image component for all images
+  - Implement lazy loading for images
+  - Set up code splitting for heavy components
+  - Implement dynamic imports for Tiptap editor
+  - Configure ISR revalidation for blog pages
+  - Add loading skeletons for async content
+  - Optimize bundle size with tree shaking
+  - Configure caching headers for static assets
+  - Run Lighthouse audit and fix issues to achieve >90 score
+  - _Requirements: 10.3, 10.4, 10.5, 10.6_
+
+- [x] 25. Add comprehensive error handling and validation
+  - Implement global error boundary for React errors
+  - Create custom 404 page
+  - Create custom 500 error page
+  - Create 403 Forbidden page for unauthorized access
+  - Add toast notification system for user feedback
+  - Implement form validation error messages
+  - Add API error handling with proper status codes
+  - Implement retry logic for failed requests
+  - Add error logging (console in development)
+  - _Requirements: All requirements (error handling aspect)_
+
+- [x] 26. Implement security measures
+  - Configure Content Security Policy headers
+  - Add rate limiting to authentication endpoints
+  - Implement CSRF protection for forms
+  - Add input sanitization for all user inputs
+  - Configure CORS for API routes
+  - Add file upload security (type and size validation)
+  - Implement XSS protection with DOMPurify
+  - Add security headers (X-Frame-Options, X-Content-Type-Options)
+  - Test security with OWASP guidelines
+  - _Requirements: All requirements (security aspect)_
+
+- [x] 27. Write comprehensive tests
+  - Write unit tests for utility functions
+  - Write unit tests for service layer methods
+  - Write integration tests for API routes
+  - Write component tests for React components
+  - Write E2E tests for critical user flows (create post, publish, view)
+  - Write E2E tests for authentication flows
+  - Set up test coverage reporting
+  - Achieve >80% code coverage
+  - _Requirements: All requirements (testing aspect)_
+
+- [x] 28. Set up deployment configuration
+  - Create vercel.json configuration file
+  - Configure environment variables in Vercel dashboard
+  - Set up PostgreSQL database on Vercel Postgres
+  - Run database migrations in production
+  - Configure custom domain (www.403-ai.com)
+  - Set up automatic deployments from main branch
+  - Configure preview deployments for PRs
+  - Test production deployment
+  - _Requirements: All requirements (deployment aspect)_
+
+- [x] 29. Create documentation and README
+  - Write comprehensive README.md with setup instructions
+  - Document environment variables
+  - Document database schema
+  - Document API endpoints
+  - Create development setup guide
+  - Create deployment guide
+  - Document component usage
+  - Add code comments for complex logic
+  - _Requirements: All requirements (documentation aspect)_
+
+- [x] 30. Final testing and polish
+  - Perform full E2E testing of all features
+  - Test on multiple browsers (Chrome, Firefox, Safari)
+  - Test on multiple devices (desktop, tablet, mobile)
+  - Fix any remaining bugs
+  - Optimize performance based on Lighthouse reports
+  - Verify all requirements are met
+  - Conduct security audit
+  - Prepare for launch
+  - _Requirements: All requirements (final validation)_

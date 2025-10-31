@@ -1,0 +1,134 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  name         String
+  role         Role     @default(USER)
+  avatarUrl    String?  @map("avatar_url")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  posts Post[]
+
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model Post {
+  id               String      @id @default(uuid())
+  title            String
+  slug             String      @unique
+  content          String      @db.Text
+  excerpt          String?     @db.VarChar(200)
+  featuredImageUrl String?     @map("featured_image_url")
+  authorId         String      @map("author_id")
+  status           PostStatus  @default(DRAFT)
+  visibility       Visibility  @default(PUBLIC)
+  publishedAt      DateTime?   @map("published_at")
+  viewCount        Int         @default(0) @map("view_count")
+  metaTitle        String?     @map("meta_title")
+  metaDescription  String?     @map("meta_description")
+  focusKeyword     String?     @map("focus_keyword")
+  createdAt        DateTime    @default(now()) @map("created_at")
+  updatedAt        DateTime    @updatedAt @map("updated_at")
+
+  author     User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  categories PostCategory[]
+  tags       PostTag[]
+
+  @@index([slug])
+  @@index([status, publishedAt])
+  @@index([authorId])
+  @@map("posts")
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum Visibility {
+  PUBLIC
+  PRIVATE
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  posts PostCategory[]
+
+  @@map("categories")
+}
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  posts PostTag[]
+
+  @@map("tags")
+}
+
+model PostCategory {
+  postId     String @map("post_id")
+  categoryId String @map("category_id")
+
+  post     Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([postId, categoryId])
+  @@map("post_categories")
+}
+
+model PostTag {
+  postId String @map("post_id")
+  tagId  String @map("tag_id")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+  @@map("post_tags")
+}
+
+model Media {
+  id           String   @id @default(uuid())
+  filename     String
+  url          String
+  thumbnailUrl String?  @map("thumbnail_url")
+  mimeType     String   @map("mime_type")
+  size         Int
+  width        Int?
+  height       Int?
+  altText      String?  @map("alt_text")
+  uploadedBy   String   @map("uploaded_by")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([uploadedBy])
+  @@map("media")
+}
