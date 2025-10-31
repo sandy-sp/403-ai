@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       message: 'Password changed successfully',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Change password error:', error);
 
     if (error.message === 'Unauthorized') {

@@ -5,6 +5,10 @@ import { formatDateShort } from '@/lib/utils/date';
 import { calculateReadTime } from '@/lib/utils/content';
 import { NewsletterForm } from '@/components/newsletter/NewsletterForm';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export default async function Home() {
   const { posts } = await PostService.getPublishedPosts({ limit: 6, sortBy: 'publishedAt' });
 

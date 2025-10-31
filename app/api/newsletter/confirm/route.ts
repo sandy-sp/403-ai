@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { NewsletterService } from '@/lib/services/newsletter.service';
 import { NotFoundError } from '@/lib/errors';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;

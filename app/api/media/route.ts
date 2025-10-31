@@ -3,6 +3,10 @@ import { requireAdmin } from '@/lib/auth';
 import { MediaService } from '@/lib/services/media.service';
 import { errorResponse, successResponse } from '@/lib/utils/api';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function GET(request: NextRequest) {
   try {
     await requireAdmin();
