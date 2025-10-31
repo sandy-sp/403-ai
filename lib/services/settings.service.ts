@@ -91,8 +91,22 @@ export class SettingsService {
    */
   static async updateSettings(settings: Record<string, string>): Promise<void> {
     try {
+      // Validate and sanitize all settings first
+      const sanitizedSettings: Record<string, string> = {};
+      
+      for (const [key, value] of Object.entries(settings)) {
+        const sanitizedValue = this.sanitizeSetting(key, value);
+        const validation = this.validateSetting(key, sanitizedValue);
+        
+        if (!validation.valid) {
+          throw new Error(`Invalid value for ${key}: ${validation.error}`);
+        }
+        
+        sanitizedSettings[key] = sanitizedValue;
+      }
+
       await Promise.all(
-        Object.entries(settings).map(([key, value]) => {
+        Object.entries(sanitizedSettings).map(([key, value]) => {
           const category = this.getCategoryFromKey(key);
           return prisma.siteSetting.upsert({
             where: { key },
@@ -239,27 +253,72 @@ export class SettingsService {
   }
 
   /**
+   * Sanitize setting value
+   */
+  static sanitizeSetting(key: string, value: string): string {
+    // Basic HTML sanitization - remove script tags and dangerous content
+    let sanitized = value
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+      .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+      .replace(/javascript:/gi, '')
+      .replace(/on\w+\s*=/gi, '');
+
+    // Trim whitespace
+    sanitized = sanitized.trim();
+
+    // Additional sanitization for specific field types
+    if (key.startsWith('social_') && sanitized) {
+      // Ensure URLs start with http:// or https://
+      if (!/^https?:\/\//i.test(sanitized)) {
+        sanitized = 'https://' + sanitized;
+      }
+    }
+
+    return sanitized;
+  }
+
+  /**
    * Validate setting value
    */
   static validateSetting(key: string, value: string): { valid: boolean; error?: string } {
+    // Sanitize first
+    const sanitizedValue = this.sanitizeSetting(key, value);
+
     // URL validation for social links
-    if (key.startsWith('social_') && value) {
+    if (key.startsWith('social_') && sanitizedValue) {
       try {
-        new URL(value);
+        const url = new URL(sanitizedValue);
+        // Only allow http and https protocols
+        if (!['http:', 'https:'].includes(url.protocol)) {
+          return { valid: false, error: 'Only HTTP and HTTPS URLs are allowed' };
+        }
       } catch {
         return { valid: false, error: 'Invalid URL format' };
       }
     }
 
     // Length validation
-    if (value.length > 1000) {
+    if (sanitizedValue.length > 1000) {
       return { valid: false, error: 'Value too long (max 1000 characters)' };
     }
 
     // Required fields validation
     const requiredFields = ['site_name', 'seo_meta_title'];
-    if (requiredFields.includes(key) && !value.trim()) {
+    if (requiredFields.includes(key) && !sanitizedValue.trim()) {
       return { valid: false, error: 'This field is required' };
+    }
+
+    // Specific field validations
+    if (key === 'site_name' && sanitizedValue.length < 2) {
+      return { valid: false, error: 'Site name must be at least 2 characters' };
+    }
+
+    if (key === 'seo_meta_title' && sanitizedValue.length > 60) {
+      return { valid: false, error: 'Meta title must be 60 characters or less' };
+    }
+
+    if (key === 'seo_meta_description' && sanitizedValue.length > 160) {
+      return { valid: false, error: 'Meta description must be 160 characters or less' };
     }
 
     return { valid: true };

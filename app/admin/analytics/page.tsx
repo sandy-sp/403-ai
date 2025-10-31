@@ -1,5 +1,6 @@
 import { requireAdmin } from '@/lib/auth';
 import { AnalyticsPageClient } from '@/components/admin/AnalyticsPageClient';
+import { AnalyticsErrorBoundary } from '@/components/common/ErrorBoundary';
 
 export const metadata = {
   title: 'Analytics - Admin',
@@ -70,5 +71,9 @@ interface DetailedAnalytics {
 export default async function AnalyticsPage() {
   await requireAdmin();
 
-  return <AnalyticsPageClient />;
+  return (
+    <AnalyticsErrorBoundary>
+      <AnalyticsPageClient />
+    </AnalyticsErrorBoundary>
+  );
 }

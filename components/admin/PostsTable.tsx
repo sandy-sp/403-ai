@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, Edit, Trash2, Eye, Filter } from 'lucide-react';
+import { Search, Edit, Trash2, Eye, Filter, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
 import { formatDateShort } from '@/lib/utils/date';
 
@@ -112,6 +112,8 @@ export function PostsTable() {
         return 'bg-status-success/20 text-status-success';
       case 'DRAFT':
         return 'bg-status-warning/20 text-status-warning';
+      case 'SCHEDULED':
+        return 'bg-accent-cyan/20 text-accent-cyan';
       case 'ARCHIVED':
         return 'bg-secondary text-text-secondary';
       default:
@@ -154,6 +156,7 @@ export function PostsTable() {
           <option value="">All Status</option>
           <option value="PUBLISHED">Published</option>
           <option value="DRAFT">Draft</option>
+          <option value="SCHEDULED">Scheduled</option>
           <option value="ARCHIVED">Archived</option>
         </select>
 
@@ -231,7 +234,18 @@ export function PostsTable() {
                     </div>
                   </td>
                   <td className="p-3 text-sm text-text-secondary">
-                    {formatDateShort(post.publishedAt || post.createdAt)}
+                    <div>
+                      {post.status === 'SCHEDULED' && post.publishedAt ? (
+                        <div>
+                          <div className="text-accent-cyan font-medium">
+                            {formatDateShort(post.publishedAt)}
+                          </div>
+                          <div className="text-xs">Scheduled</div>
+                        </div>
+                      ) : (
+                        formatDateShort(post.publishedAt || post.createdAt)
+                      )}
+                    </div>
                   </td>
                   <td className="p-3">
                     <div className="flex items-center gap-2">

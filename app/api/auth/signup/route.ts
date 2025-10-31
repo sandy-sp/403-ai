@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { hashPassword } from '@/lib/password';
 import { signUpSchema } from '@/lib/validations/auth';
+import { EmailService } from '@/lib/services/email.service';
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,6 +40,14 @@ export async function POST(request: NextRequest) {
         createdAt: true,
       },
     });
+
+    // Send welcome email (don't block user creation if email fails)
+    try {
+      await EmailService.sendWelcomeEmail(user.email, user.name);
+    } catch (emailError) {
+      console.error('Failed to send welcome email:', emailError);
+      // Continue - user creation should succeed even if email fails
+    }
 
     return NextResponse.json(
       { message: 'User created successfully', user },

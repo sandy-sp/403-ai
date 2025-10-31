@@ -8,6 +8,7 @@ import { AnalyticsChart } from '@/components/admin/AnalyticsChart';
 import { TopPostsList } from '@/components/admin/TopPostsList';
 import { TopCategoriesList } from '@/components/admin/TopCategoriesList';
 import { AnalyticsExport } from '@/components/admin/AnalyticsExport';
+import { AnalyticsErrorBoundary } from '@/components/common/ErrorBoundary';
 import { 
   BarChart3, 
   Eye, 
@@ -204,7 +205,7 @@ export function AnalyticsPageClient() {
             <h1 className="text-3xl font-bold">Analytics</h1>
           </div>
           <p className="text-text-secondary">
-            Detailed insights into your blog's performance
+            Detailed insights into your blog&apos;s performance
           </p>
         </div>
         <DateRangePicker value={dateRange} onChange={handleDateRangeChange} />
@@ -213,41 +214,51 @@ export function AnalyticsPageClient() {
       {/* Key Metrics */}
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Key Metrics</h2>
-        <AnalyticsMetrics metrics={metrics} />
+        <AnalyticsErrorBoundary>
+          <AnalyticsMetrics metrics={metrics} />
+        </AnalyticsErrorBoundary>
       </div>
 
       {/* Charts */}
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Trends</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <AnalyticsChart
-            data={analytics.dailyViews}
-            type="views"
-            title="Daily Views"
-            color="#00FFD1"
-            height={250}
-          />
-          <AnalyticsChart
-            data={analytics.dailyPosts}
-            type="posts"
-            title="Posts Published"
-            color="#B14AED"
-            height={250}
-          />
-          <AnalyticsChart
-            data={analytics.dailyComments}
-            type="comments"
-            title="Daily Comments"
-            color="#2ED573"
-            height={250}
-          />
-          <AnalyticsChart
-            data={analytics.dailySubscribers}
-            type="subscribers"
-            title="New Subscribers"
-            color="#FFA502"
-            height={250}
-          />
+          <AnalyticsErrorBoundary>
+            <AnalyticsChart
+              data={analytics.dailyViews}
+              type="views"
+              title="Daily Views"
+              color="#00FFD1"
+              height={250}
+            />
+          </AnalyticsErrorBoundary>
+          <AnalyticsErrorBoundary>
+            <AnalyticsChart
+              data={analytics.dailyPosts}
+              type="posts"
+              title="Posts Published"
+              color="#B14AED"
+              height={250}
+            />
+          </AnalyticsErrorBoundary>
+          <AnalyticsErrorBoundary>
+            <AnalyticsChart
+              data={analytics.dailyComments}
+              type="comments"
+              title="Daily Comments"
+              color="#2ED573"
+              height={250}
+            />
+          </AnalyticsErrorBoundary>
+          <AnalyticsErrorBoundary>
+            <AnalyticsChart
+              data={analytics.dailySubscribers}
+              type="subscribers"
+              title="New Subscribers"
+              color="#FFA502"
+              height={250}
+            />
+          </AnalyticsErrorBoundary>
         </div>
       </div>
 
@@ -255,39 +266,47 @@ export function AnalyticsPageClient() {
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Top Performing Content</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          <TopPostsList
-            posts={analytics.topPostsByViews.map(post => ({
-              id: post.id,
-              title: post.title,
-              slug: post.slug,
-              views: post.views,
-              comments: 0, // We don't have comments count in this data
-            }))}
-            title="Top Posts by Views"
-            sortBy="views"
-          />
-          <TopPostsList
-            posts={analytics.topPostsByComments.map(post => ({
-              id: post.id,
-              title: post.title,
-              slug: post.slug,
-              views: 0, // We don't have views count in this data
-              comments: post.comments,
-            }))}
-            title="Top Posts by Comments"
-            sortBy="comments"
-          />
-          <TopCategoriesList
-            categories={analytics.topCategories}
-            title="Popular Categories"
-          />
+          <AnalyticsErrorBoundary>
+            <TopPostsList
+              posts={analytics.topPostsByViews.map(post => ({
+                id: post.id,
+                title: post.title,
+                slug: post.slug,
+                views: post.views,
+                comments: 0, // We don't have comments count in this data
+              }))}
+              title="Top Posts by Views"
+              sortBy="views"
+            />
+          </AnalyticsErrorBoundary>
+          <AnalyticsErrorBoundary>
+            <TopPostsList
+              posts={analytics.topPostsByComments.map(post => ({
+                id: post.id,
+                title: post.title,
+                slug: post.slug,
+                views: 0, // We don't have views count in this data
+                comments: post.comments,
+              }))}
+              title="Top Posts by Comments"
+              sortBy="comments"
+            />
+          </AnalyticsErrorBoundary>
+          <AnalyticsErrorBoundary>
+            <TopCategoriesList
+              categories={analytics.topCategories}
+              title="Popular Categories"
+            />
+          </AnalyticsErrorBoundary>
         </div>
       </div>
 
       {/* Export */}
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Export Data</h2>
-        <AnalyticsExport data={analytics} dateRange={dateRange} />
+        <AnalyticsErrorBoundary>
+          <AnalyticsExport data={analytics} dateRange={dateRange} />
+        </AnalyticsErrorBoundary>
       </div>
     </div>
   );

@@ -17,6 +17,7 @@ export const createPostSchema = z.object({
   metaTitle: z.string().max(60, 'Meta title is too long').optional(),
   metaDescription: z.string().max(160, 'Meta description is too long').optional(),
   focusKeyword: z.string().max(50, 'Focus keyword is too long').optional(),
+  sendNewsletter: z.boolean().optional(),
 });
 
 export const updatePostSchema = z.object({
@@ -36,6 +37,7 @@ export const updatePostSchema = z.object({
   metaTitle: z.string().max(60, 'Meta title is too long').optional(),
   metaDescription: z.string().max(160, 'Meta description is too long').optional(),
   focusKeyword: z.string().max(50, 'Focus keyword is too long').optional().nullable(),
+  sendNewsletter: z.boolean().optional(),
 });
 
 export type CreatePostInput = z.infer<typeof createPostSchema>;

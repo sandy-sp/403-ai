@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { UseFormRegister, UseFormWatch, UseFormSetValue, FieldErrors } from 'react-hook-form';
-import { X } from 'lucide-react';
+import { X, Calendar, Clock } from 'lucide-react';
+import { format } from 'date-fns';
 import type { z } from 'zod';
 import type { createPostSchema } from '@/lib/validations/post';
 
@@ -17,13 +18,15 @@ interface PublishPanelProps {
 
 export function PublishPanel({ register, watch, setValue, errors }: PublishPanelProps) {
   const [categories, setCategories] = useState<any[]>([]);
-  const [tags, setTags] = useState<any[]>([]);
+  const [tags, setTags] = useState<unknown[]>([]);
   const [tagSearch, setTagSearch] = useState('');
   const [featuredImagePreview, setFeaturedImagePreview] = useState<string>('');
 
   const selectedCategoryIds = watch('categoryIds') || [];
   const selectedTagIds = watch('tagIds') || [];
   const featuredImageUrl = watch('featuredImageUrl');
+  const status = watch('status');
+  const publishedAt = watch('publishedAt');
 
   useEffect(() => {
     fetchCategories();
@@ -196,6 +199,86 @@ export function PublishPanel({ register, watch, setValue, errors }: PublishPanel
             </label>
           ))}
         </div>
+      </div>
+
+      {/* Publishing Schedule */}
+      <div className="card">
+        <h3 className="font-semibold mb-3">Publishing Schedule</h3>
+        
+        {/* Status Selection */}
+        <div className="mb-4">
+          <label className="label">Status</label>
+          <select
+            {...register('status')}
+            className="input"
+          >
+            <option value="DRAFT">Draft</option>
+            <option value="PUBLISHED">Publish Now</option>
+            <option value="SCHEDULED">Schedule for Later</option>
+          </select>
+        </div>
+
+        {/* Schedule Date/Time - Only show when SCHEDULED is selected */}
+        {status === 'SCHEDULED' && (
+          <div className="space-y-3">
+            <div>
+              <label className="label">Publish Date & Time</label>
+              <input
+                {...register('publishedAt')}
+                type="datetime-local"
+                className="input"
+                min={format(new Date(), "yyyy-MM-dd'T'HH:mm")}
+              />
+              {errors.publishedAt && (
+                <p className="text-status-error text-sm mt-1">
+                  {errors.publishedAt.message}
+                </p>
+              )}
+            </div>
+            
+            {publishedAt && (
+              <div className="flex items-center gap-2 p-3 bg-accent-cyan/10 rounded-lg">
+                <Calendar size={16} className="text-accent-cyan" />
+                <span className="text-sm text-accent-cyan">
+                  Scheduled for: {format(new Date(publishedAt), 'PPP p')}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Current Status Display */}
+        {status && (
+          <div className="mt-3 p-3 bg-secondary rounded-lg">
+            <div className="flex items-center gap-2">
+              <Clock size={16} className="text-text-secondary" />
+              <span className="text-sm">
+                Status: <span className="font-semibold capitalize">{status.toLowerCase()}</span>
+                {status === 'SCHEDULED' && publishedAt && (
+                  <span className="text-text-secondary">
+                    {' '}• {format(new Date(publishedAt), 'MMM dd, yyyy h:mm a')}
+                  </span>
+                )}
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Newsletter */}
+      <div className="card">
+        <h3 className="font-semibold mb-3">Newsletter</h3>
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            {...register('sendNewsletter')}
+            type="checkbox"
+            className="w-4 h-4 rounded border-secondary-light bg-secondary text-accent-cyan focus:ring-accent-cyan"
+          />
+          <span className="text-sm">Send to newsletter subscribers</span>
+        </label>
+        <p className="text-xs text-text-secondary mt-2">
+          When published, this post will be sent to all active newsletter subscribers
+        </p>
       </div>
 
       {/* SEO Settings */}

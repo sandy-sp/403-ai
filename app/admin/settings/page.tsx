@@ -1,4 +1,5 @@
 import { SettingsForm } from '@/components/admin/SettingsForm';
+import { SettingsErrorBoundary } from '@/components/common/ErrorBoundary';
 import { requireAdmin } from '@/lib/auth';
 import { SettingsService } from '@/lib/services/settings.service';
 
@@ -27,5 +28,9 @@ export default async function AdminSettingsPage() {
     settings = await SettingsService.getAllSettings();
   }
 
-  return <SettingsForm initialSettings={settings} />;
+  return (
+    <SettingsErrorBoundary>
+      <SettingsForm initialSettings={settings} />
+    </SettingsErrorBoundary>
+  );
 }

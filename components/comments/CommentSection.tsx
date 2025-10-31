@@ -2,6 +2,7 @@
 
 import { CommentCard } from './CommentCard';
 import { CommentForm } from './CommentForm';
+import { CommentErrorBoundary } from '@/components/common/ErrorBoundary';
 import { MessageSquare } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -72,57 +73,64 @@ export function CommentSection({
   };
 
   return (
-    <section className="mt-12 border-t border-secondary-light pt-12">
-      {/* Comment Form */}
-      {isAuthenticated ? (
-        <div className="mb-8">
-          <CommentForm postId={postId} />
-        </div>
-      ) : (
-        <div className="mb-8 p-6 bg-secondary-light rounded-lg border border-secondary text-center">
-          <p className="text-text-secondary mb-4">
-            Please sign in to leave a comment
-          </p>
-          <Link
-            href="/signin"
-            className="inline-block px-6 py-3 bg-accent-cyan text-primary rounded-lg font-semibold hover:bg-accent-cyan/90 transition-colors"
-          >
-            Sign In
-          </Link>
-        </div>
-      )}
-
-      {/* Comments List */}
-      <div className="space-y-6">
-        <div className="flex items-center gap-2">
-          <MessageSquare size={24} className="text-accent-cyan" />
-          <h3 className="text-2xl font-bold">Comments ({comments.length})</h3>
-        </div>
-
-        {comments.length === 0 ? (
-          <div className="text-center py-12 bg-secondary-light rounded-lg border border-secondary">
-            <MessageSquare
-              size={48}
-              className="mx-auto mb-4 text-text-secondary"
-            />
-            <p className="text-text-secondary">
-              No comments yet. Be the first to share your thoughts!
-            </p>
+    <CommentErrorBoundary>
+      <section className="mt-12 border-t border-secondary-light pt-12">
+        {/* Comment Form */}
+        {isAuthenticated ? (
+          <div className="mb-8">
+            <CommentErrorBoundary>
+              <CommentForm postId={postId} />
+            </CommentErrorBoundary>
           </div>
         ) : (
-          <div className="space-y-4">
-            {comments.map((comment) => (
-              <CommentCard
-                key={comment.id}
-                comment={comment}
-                currentUserId={currentUserId}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-              />
-            ))}
+          <div className="mb-8 p-6 bg-secondary-light rounded-lg border border-secondary text-center">
+            <p className="text-text-secondary mb-4">
+              Please sign in to leave a comment
+            </p>
+            <Link
+              href="/signin"
+              className="inline-block px-6 py-3 bg-accent-cyan text-primary rounded-lg font-semibold hover:bg-accent-cyan/90 transition-colors"
+            >
+              Sign In
+            </Link>
           </div>
         )}
-      </div>
-    </section>
+
+        {/* Comments List */}
+        <div className="space-y-6">
+          <div className="flex items-center gap-2">
+            <MessageSquare size={24} className="text-accent-cyan" />
+            <h3 className="text-2xl font-bold">Comments ({comments.length})</h3>
+          </div>
+
+          {comments.length === 0 ? (
+            <div className="text-center py-12 bg-secondary-light rounded-lg border border-secondary">
+              <MessageSquare
+                size={48}
+                className="mx-auto mb-4 text-text-secondary"
+              />
+              <p className="text-text-secondary">
+                No comments yet. Be the first to share your thoughts!
+              </p>
+            </div>
+          ) : (
+            <CommentErrorBoundary>
+              <div className="space-y-4">
+                {comments.map((comment) => (
+                  <CommentErrorBoundary key={comment.id}>
+                    <CommentCard
+                      comment={comment}
+                      currentUserId={currentUserId}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                    />
+                  </CommentErrorBoundary>
+                ))}
+              </div>
+            </CommentErrorBoundary>
+          )}
+        </div>
+      </section>
+    </CommentErrorBoundary>
   );
 }
