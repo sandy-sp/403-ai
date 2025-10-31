@@ -68,3 +68,24 @@ export function handlePrismaError(error: any): never {
   
   throw error;
 }
+
+export class InvalidTokenError extends AppError {
+  constructor(message: string = 'Invalid or expired token') {
+    super(400, message, 'INVALID_TOKEN');
+    this.name = 'InvalidTokenError';
+  }
+}
+
+export class ExpiredTokenError extends AppError {
+  constructor(message: string = 'Token has expired') {
+    super(400, message, 'EXPIRED_TOKEN');
+    this.name = 'ExpiredTokenError';
+  }
+}
+
+export class TokenAlreadyUsedError extends AppError {
+  constructor(message: string = 'Token has already been used') {
+    super(400, message, 'TOKEN_ALREADY_USED');
+    this.name = 'TokenAlreadyUsedError';
+  }
+}

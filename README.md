@@ -214,14 +214,38 @@ npm run type-check      # Run TypeScript checks
 
 ## 🌐 Deployment
 
-### Deploy to Vercel (Recommended)
+### Deploy to Vercel + Squarespace Domain
 
-1. Push your code to GitHub
-2. Import project in Vercel
-3. Configure environment variables
-4. Deploy!
+We've created comprehensive deployment guides to help you deploy to Vercel and connect your Squarespace domain (www.403-ai.com):
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
+#### Quick Start (30 minutes)
+📘 **[QUICK_START_DEPLOYMENT.md](QUICK_START_DEPLOYMENT.md)** - Fastest path to get your site live
+
+#### Comprehensive Guides
+📗 **[PRE_DEPLOYMENT_SETUP.md](PRE_DEPLOYMENT_SETUP.md)** - Set up external services (Cloudinary, Resend, etc.)  
+📕 **[DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)** - Complete step-by-step deployment guide  
+📙 **[DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md)** - Checklist to ensure nothing is missed  
+📊 **[DEPLOYMENT_SUMMARY.md](DEPLOYMENT_SUMMARY.md)** - Overview of deployment process
+
+#### What You'll Need
+- GitHub account
+- Vercel account (free tier)
+- Cloudinary account (free tier) - for images
+- Resend account (free tier) - for emails
+- Squarespace domain (www.403-ai.com)
+
+#### Deployment Steps Overview
+1. Push code to GitHub
+2. Create Vercel Postgres database
+3. Import repository to Vercel
+4. Configure environment variables
+5. Run database migrations
+6. Connect Squarespace domain via DNS
+7. Test and go live! 🚀
+
+**Total Time:** 30 minutes - 2 hours (depending on approach)
+
+See the deployment guides for detailed instructions.
 
 ### Environment Variables
 

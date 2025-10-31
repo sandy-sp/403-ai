@@ -17,10 +17,13 @@ model User {
   name         String
   role         Role     @default(USER)
   avatarUrl    String?  @map("avatar_url")
+  bio          String?  @db.Text
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  posts Post[]
+  posts               Post[]
+  comments            Comment[]
+  passwordResetTokens PasswordResetToken[]
 
   @@map("users")
 }
@@ -51,6 +54,7 @@ model Post {
   author     User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
   categories PostCategory[]
   tags       PostTag[]
+  comments   Comment[]
 
   @@index([slug])
   @@index([status, publishedAt])
@@ -62,6 +66,7 @@ enum PostStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+  SCHEDULED
 }
 
 enum Visibility {
@@ -131,4 +136,75 @@ model Media {
 
   @@index([uploadedBy])
   @@map("media")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+model NewsletterSubscriber {
+  id             String           @id @default(uuid())
+  email          String           @unique
+  status         SubscriberStatus @default(PENDING)
+  confirmedAt    DateTime?        @map("confirmed_at")
+  unsubscribedAt DateTime?        @map("unsubscribed_at")
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+
+  @@index([email])
+  @@index([status])
+  @@map("newsletter_subscribers")
+}
+
+enum SubscriberStatus {
+  PENDING
+  ACTIVE
+  UNSUBSCRIBED
+}
+
+model Comment {
+  id        String        @id @default(uuid())
+  postId    String        @map("post_id")
+  userId    String        @map("user_id")
+  content   String        @db.Text
+  status    CommentStatus @default(PENDING)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+  @@index([userId])
+  @@index([status])
+  @@map("comments")
+}
+
+enum CommentStatus {
+  PENDING
+  APPROVED
+  SPAM
+}
+
+model SiteSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String   @db.Text
+  category  String
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([key])
+  @@index([category])
+  @@map("site_settings")
 }

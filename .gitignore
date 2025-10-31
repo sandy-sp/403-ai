@@ -25,6 +25,7 @@ yarn-error.log*
 # Local env files
 .env
 .env*.local
+.env.production
 
 # Vercel
 .vercel
@@ -35,3 +36,6 @@ next-env.d.ts
 
 # Prisma
 prisma/migrations/
+
+# Kiro
+.kiro
