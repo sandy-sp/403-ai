@@ -6,6 +6,10 @@ import { createPostSchema } from '@/lib/validations/post';
 import { errorResponse, successResponse } from '@/lib/utils/api';
 import { prisma } from '@/lib/prisma';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;

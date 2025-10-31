@@ -4,6 +4,10 @@ import { requireAuth } from '@/lib/auth';
 import { z } from 'zod';
 import { ValidationError } from '@/lib/errors';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(6),
   newPassword: z

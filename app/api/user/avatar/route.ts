@@ -3,6 +3,10 @@ import { ProfileService } from '@/lib/services/profile.service';
 import { MediaService } from '@/lib/services/media.service';
 import { requireAuth } from '@/lib/auth';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function POST(request: NextRequest) {
   try {
     const session = await requireAuth();

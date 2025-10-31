@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SettingsService } from '@/lib/services/settings.service';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 // Public endpoint for getting site settings (no auth required)
 export async function GET(request: NextRequest) {
   try {

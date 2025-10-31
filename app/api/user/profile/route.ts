@@ -3,6 +3,10 @@ import { ProfileService } from '@/lib/services/profile.service';
 import { requireAuth } from '@/lib/auth';
 import { z } from 'zod';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 const updateProfileSchema = z.object({
   name: z.string().min(2).optional(),
   bio: z.string().max(500).optional(),
