@@ -55,9 +55,11 @@ This opens Prisma Studio where you can see all your tables.
 1. Go to Vercel Dashboard → Your Project → Settings → General
 2. Find "Build & Development Settings"
 3. Override Build Command with:
+
    ```bash
    prisma generate && prisma migrate deploy && next build
    ```
+
 4. Redeploy
 
 ### Option B: Use Vercel Postgres Dashboard
@@ -71,6 +73,7 @@ This opens Prisma Studio where you can see all your tables.
 ## What Migrations Do
 
 Migrations will create these tables:
+
 - ✅ users
 - ✅ posts
 - ✅ categories
@@ -92,14 +95,17 @@ Migrations will create these tables:
 Once tables exist, create an admin user:
 
 **Option 1: Via Signup + Database Update**
+
 1. Go to your site: `/signup`
 2. Create an account
 3. In Vercel Postgres Query tab, run:
+
    ```sql
    UPDATE users SET role = 'ADMIN' WHERE email = 'your@email.com';
    ```
 
 **Option 2: Direct SQL Insert**
+
 ```sql
 -- First, hash your password using bcrypt (cost 10)
 -- You can use: https://bcrypt-generator.com/
@@ -121,13 +127,17 @@ VALUES (
 ## Troubleshooting
 
 ### Error: "relation 'users' does not exist"
+
 **Solution:** Migrations haven't run. Follow Step 4 above.
 
 ### Error: "Can't reach database server"
+
 **Solution:** Check DATABASE_URL is correct in Vercel environment variables.
 
 ### Error: "Migration failed"
-**Solution:** 
+
+**Solution:**
+
 1. Check database permissions
 2. Ensure DATABASE_URL has `?sslmode=require` at the end
 3. Try: `npx prisma db push` (for development)
