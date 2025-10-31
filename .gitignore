@@ -38,4 +38,4 @@ next-env.d.ts
 prisma/migrations/
 
 # Kiro
-.kiro
+/.kiro
