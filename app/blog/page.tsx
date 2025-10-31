@@ -15,71 +15,103 @@ export default async function BlogPage({
 }: {
   searchParams: { category?: string; tag?: string; search?: string; page?: string };
 }) {
+  // Skip database queries during build if DATABASE_URL is not set
+  if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
+    return (
+      <div className="min-h-screen bg-primary flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Blog Coming Soon</h1>
+          <p className="text-text-secondary">Database is being set up...</p>
+        </div>
+      </div>
+    );
+  }
+
   const page = parseInt(searchParams.page || '1');
   const limit = 12;
 
-  const [{ posts, total, totalPages }, categories, tags] = await Promise.all([
-    PostService.getPublishedPosts({
-      page,
-      limit,
-      categoryId: searchParams.category,
-      tagId: searchParams.tag,
-      search: searchParams.search,
-      sortBy: 'publishedAt',
+  try {
+    const [{ posts, total, totalPages }, categories, tags] = await Promise.all([
+      PostService.getPublishedPosts({
+        page,
+        limit,
+        categoryId: searchParams.category,
+        tagId: searchParams.tag,
+        search: searchParams.search,
+        sortBy: 'publishedAt',
+        sortOrder: 'desc',
+      }),
+      CategoryService.getCategoriesWithPostCount(),
+      TagService.getTagsWithPostCount(),
+    ]);
+
+    // Get popular posts (top 5 by views)
+    const { posts: popularPosts } = await PostService.getPublishedPosts({
+      limit: 5,
+      sortBy: 'viewCount',
       sortOrder: 'desc',
-    }),
-    CategoryService.getCategoriesWithPostCount(),
-    TagService.getTagsWithPostCount(),
-  ]);
+    });
 
-  // Get popular posts (top 5 by views)
-  const { posts: popularPosts } = await PostService.getPublishedPosts({
-    limit: 5,
-    sortBy: 'viewCount',
-    sortOrder: 'desc',
-  });
+    return renderBlogPage(posts, categories, tags, popularPosts, page, totalPages, total);
+  } catch (error) {
+    console.error('Blog page error:', error);
+    // Return empty state if database is not ready
+    return renderBlogPage([], [], [], [], 1, 1, 0);
+  }
+}
 
-  return (
-    <div className="min-h-screen bg-primary">
-      {/* Header */}
-      <header className="bg-secondary border-b border-secondary-light">
-        <div className="container mx-auto px-4 py-6">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-accent-cyan to-accent-purple bg-clip-text text-transparent">
-            Blog
-          </h1>
-          <p className="text-text-secondary">
-            Exploring forbidden knowledge in AI and machine learning
-          </p>
-        </div>
-      </header>
+function renderBlogPage(
+  posts: any[],
+  categories: any[],
+  tags: any[],
+  popularPosts: any[],
+  page: number,
+  totalPages: number,
+  total: number
+) {
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Main Content */}
-          <div className="flex-1">
-            <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
-              <BlogList
-                posts={posts}
-                currentPage={page}
-                totalPages={totalPages}
-                total={total}
-              />
-            </Suspense>
+    return (
+      <div className="min-h-screen bg-primary">
+        {/* Header */}
+        <header className="bg-secondary border-b border-secondary-light">
+          <div className="container mx-auto px-4 py-6">
+            <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-accent-cyan to-accent-purple bg-clip-text text-transparent">
+              Blog
+            </h1>
+            <p className="text-text-secondary">
+              Exploring forbidden knowledge in AI and machine learning
+            </p>
           </div>
+        </header>
 
-          {/* Sidebar */}
-          <aside className="lg:w-80">
-            <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
-              <BlogSidebar
-                categories={categories}
-                tags={tags}
-                popularPosts={popularPosts}
-              />
-            </Suspense>
-          </aside>
+        {/* Main Content */}
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Main Content */}
+            <div className="flex-1">
+              <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+                <BlogList
+                  posts={posts}
+                  currentPage={page}
+                  totalPages={totalPages}
+                  total={total}
+                />
+              </Suspense>
+            </div>
+
+            {/* Sidebar */}
+            <aside className="lg:w-80">
+              <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+                <BlogSidebar
+                  categories={categories}
+                  tags={tags}
+                  popularPosts={popularPosts}
+                />
+              </Suspense>
+            </aside>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }

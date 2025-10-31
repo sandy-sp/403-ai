@@ -10,7 +10,18 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 export default async function Home() {
-  const { posts } = await PostService.getPublishedPosts({ limit: 6, sortBy: 'publishedAt' });
+  // Skip database queries during build if DATABASE_URL is not set
+  let posts: any[] = [];
+  
+  if (process.env.DATABASE_URL) {
+    try {
+      const result = await PostService.getPublishedPosts({ limit: 6, sortBy: 'publishedAt' });
+      posts = result.posts;
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      // Continue with empty posts array
+    }
+  }
 
   return (
     <main className="min-h-screen">
